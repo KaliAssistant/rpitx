@@ -1,0 +1,9 @@
+[submodule "csdr"]
+        path = csdr
+        url =  https://github.com/KaliAssistant/csdr
+[submodule "ft8_lib"]
+        path = src/pift8/ft8_lib
+        url = https://github.com/KaliAssistant/ft8_lib
+[submodule "librpitx"]
+        path = src/librpitx
+        url = https://github.com/KaliAssistant/librpitx
