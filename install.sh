@@ -11,49 +11,66 @@ sudo apt-get install -y rtl-sdr buffer
 git submodule update --init --recursive
 
 cd csdr || exit
-make && sudo make install
+make -j $(nproc) && sudo make install
 cd ../ || exit
 
 cd src || exit
 
 
 cd librpitx/src || exit
-make && sudo make install
+make -j $(nproc) && sudo make install
 cd ../../ || exit
 
 cd pift8
 
 cd ft8_lib
-make && sudo make install
+make -j $(nproc) && sudo make install
 cd ../
-make
+make -j $(nproc)
 cd ../
 
-make
+make -j $(nproc)
 sudo make install
 cd .. || exit
 
 printf "\n\n"
-printf "In order to run properly, rpitx need to modify /boot/config.txt. Are you sure (y/n) "
-read -r CONT
 
-if [ "$CONT" = "y" ]; then
-  echo "Set GPU to 250Mhz in order to be stable"
-   LINE='gpu_freq=250'
-   if [ ! -f /boot/firmware/config.txt ]; then
+printf "You are install rpitx in rpi-sdr-tx branch, (auto modify)\n"
+
+#printf "In order to run properly, rpitx need to modify /boot/config.txt. Are you sure (y/n) "
+#read -r CONT
+
+#if [ "$CONT" = "y" ]; then
+#  echo "Set GPU to 250Mhz in order to be stable"
+#   LINE='gpu_freq=250'
+#   if [ ! -f /boot/firmware/config.txt ]; then
+#   echo "Raspbian 11 or below detected using /boot/config.txt"
+#   FILE='/boot/config.txt'
+#   else
+#   echo "Raspbian 12 detected using /boot/firmware/config.txt"
+#   FILE='/boot/firmware/config.txt'
+#   fi
+#   grep -qF "$LINE" "$FILE"  || echo "$LINE" | sudo tee --append "$FILE"
+#   #PI4
+#   LINE='force_turbo=1'
+#   grep -qF "$LINE" "$FILE"  || echo "$LINE" | sudo tee --append "$FILE"
+#   echo "Installation completed !"
+#else
+#  echo "Warning : Rpitx should be instable and stop from transmitting !";
+#fi
+echo "Set GPU to 250Mhz in order to be stable"
+LINE='gpu_freq=250'
+if [ ! -f /boot/firmware/config.txt ]; then
    echo "Raspbian 11 or below detected using /boot/config.txt"
    FILE='/boot/config.txt'
-   else
+else
    echo "Raspbian 12 detected using /boot/firmware/config.txt"
    FILE='/boot/firmware/config.txt'
-   fi
-   grep -qF "$LINE" "$FILE"  || echo "$LINE" | sudo tee --append "$FILE"
-   #PI4
-   LINE='force_turbo=1'
-   grep -qF "$LINE" "$FILE"  || echo "$LINE" | sudo tee --append "$FILE"
-   echo "Installation completed !"
-else
-  echo "Warning : Rpitx should be instable and stop from transmitting !";
 fi
 
+grep -qF "$LINE" "$FILE"  || echo "$LINE" | sudo tee --append "$FILE"
+#PI4
+LINE='force_turbo=1'
+grep -qF "$LINE" "$FILE"  || echo "$LINE" | sudo tee --append "$FILE"
+echo "Installation completed !"
 
