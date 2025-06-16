@@ -1,7 +1,12 @@
 #!/bin/sh
 
-if [ "$EUID" -ne 0 ]
-  then echo -e "\e[1;31m Please run as root !\e[0m"
+#if [ "$EUID" -ne 0 ]
+#  then echo -e "\e[1;31m Please run as root !\e[0m"
+#  exit 1
+#fi
+
+if [ "$(id -u)" -ne 0 ]; then
+  echo "\e[1;31m Please run as root !\e[0m"
   exit 1
 fi
 
