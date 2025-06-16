@@ -1,36 +1,41 @@
 #!/bin/sh
 
+if [ "$EUID" -ne 0 ]
+  then echo -e "\e[1;31m Please run as root !\e[0m"
+  exit 1
+fi
+
 echo Install rpitx - some package need internet connection -
 
-sudo apt-get update
-sudo apt-get install -y libsndfile1-dev git
-sudo apt-get install -y imagemagick libfftw3-dev libraspberrypi-dev
+apt-get update
+apt-get install -y libsndfile1-dev git
+apt-get install -y imagemagick libfftw3-dev libraspberrypi-dev
 #For rtl-sdr use
-sudo apt-get install -y rtl-sdr buffer
+apt-get install -y rtl-sdr buffer
 # We use CSDR as a dsp for analogs modes thanks to HA7ILM
 git submodule update --init --recursive
 
 cd csdr || exit
-make -j $(nproc) && sudo make install
+make -j $(nproc) && make install
 cd ../ || exit
 
 cd src || exit
 
 
 cd librpitx/src || exit
-make -j $(nproc) && sudo make install
+make -j $(nproc) && make install
 cd ../../ || exit
 
 cd pift8
 
 cd ft8_lib
-make -j $(nproc) && sudo make install
+make -j $(nproc) && make install
 cd ../
 make -j $(nproc)
 cd ../
 
 make -j $(nproc)
-sudo make install
+make install
 cd .. || exit
 
 printf "\n\n"
